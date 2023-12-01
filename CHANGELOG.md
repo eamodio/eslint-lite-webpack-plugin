@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Changed
+
+- Changes watch output to always output all errors and warnings
+- Changes to use `fast-glob` instead of `glob` to improve performance
+
+### Fixed
+
+- Fixes issue where workers weren't reporting errors or warnings
+
 ## [0.0.5] - 2023-12-01
 
 ## [0.0.4] - 2023-12-01
