@@ -80,14 +80,22 @@ class ESLintLitePlugin {
 
 					let results: ESLint.LintResult[];
 					if (this.options.worker && files.size > ESLintLitePlugin.workerFilesThreshold) {
-						async function runWorker(files: string[], results: ESLint.LintResult[]): Promise<void> {
+						const eslintOptionsJSON = JSON.stringify(eslintOptions);
+
+						async function runWorker(
+							id: number,
+							files: string[],
+							results: ESLint.LintResult[],
+						): Promise<void> {
+							const start = Date.now();
+
 							results.push(
 								await new Promise((resolve, reject) => {
 									const code = `
 	const { ESLint } = require('eslint');
 	const { parentPort } = require('worker_threads');
 
-	const eslint = new ESLint(${JSON.stringify(eslintOptions)});
+	const eslint = new ESLint(${eslintOptionsJSON});
 
 	async function run() {
 		const results = await eslint.lintFiles(${JSON.stringify(files)});
@@ -99,6 +107,12 @@ class ESLintLitePlugin {
 										.on('message', r => resolve(r))
 										.on('error', ex => reject(ex));
 								}),
+							);
+
+							logger.debug(
+								`Linting '${compilation.compiler.name}' worker(${id}) finished ${
+									files.length
+								} files in \x1b[32m${Date.now() - start}ms\x1b[0m`,
 							);
 						}
 
@@ -116,9 +130,10 @@ class ESLintLitePlugin {
 
 						results = [];
 						if (chunks != null && chunks.length > 1) {
-							await Promise.allSettled(chunks.map(c => runWorker(c, results)));
+							let id = 0;
+							await Promise.allSettled(chunks.map(c => runWorker(id++, c, results)));
 						} else {
-							await runWorker(chunks?.length ? chunks[0] : [...files], results);
+							await runWorker(0, chunks?.length ? chunks[0] : [...files], results);
 						}
 					} else {
 						logger.log(`Linting '${compilation.compiler.name}'...`);
