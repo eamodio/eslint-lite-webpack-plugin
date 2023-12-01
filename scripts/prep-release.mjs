@@ -52,7 +52,7 @@ rl.question(`Enter the new version number (format x.x.x, current is ${currentVer
 
 	if (match == null) {
 		// Add the [unreleased]: line
-		data += `\n[Unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v${version}...HEAD`;
+		data += `\n[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v${version}...HEAD`;
 	} else {
 		const unreleasedLink = match[0].replace(/\/compare\/v(.+?)\.\.\.HEAD/, `\/compare\/v${version}...HEAD`);
 
