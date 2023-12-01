@@ -25,22 +25,25 @@ class ESLintLitePlugin {
 
 	apply(compiler: Compiler) {
 		let initialRun = true;
+		const resultsCache = new Map<string, ESLint.LintResult>();
 
 		compiler.hooks.make.tapPromise(ESLintLitePlugin.name, async compilation => {
+			const start = Date.now();
 			const logger = compilation.compiler.getInfrastructureLogger(ESLintLitePlugin.name);
 
 			const eslintOptions =
 				this.options.eslintOptions != null
 					? {
-							cache: this.options.eslintOptions.cache,
-							cacheLocation: this.options.eslintOptions.cacheLocation,
-							cacheStrategy: this.options.eslintOptions.cacheStrategy,
+							cache: initialRun ? this.options.eslintOptions.cache : false,
+							cacheLocation: initialRun ? this.options.eslintOptions.cacheLocation : undefined,
+							cacheStrategy: initialRun ? this.options.eslintOptions.cacheStrategy : undefined,
 							overrideConfigFile: this.options.eslintOptions.overrideConfigFile,
 					  }
 					: {};
 			const eslint = new (await import('eslint')).ESLint(eslintOptions);
 
 			const files = new Set<string>();
+			const startGlobbing = Date.now();
 
 			// If it's the initial run, lint all files.
 			if (initialRun) {
@@ -67,12 +70,21 @@ class ESLintLitePlugin {
 			}
 
 			if (files.size === 0) {
-				logger.log(`Linting '${compilation.compiler.name}': Nothing to lint`);
+				logger.log(
+					`Linting '${compilation.compiler.name}' found 0 files to lint in \x1b[32m${
+						Date.now() - startGlobbing
+					}ms\x1b[0m`,
+				);
 				return;
 			}
 
+			logger.log(
+				`Linting '${compilation.compiler.name}' found ${files.size} files in \x1b[32m${
+					Date.now() - startGlobbing
+				}ms\x1b[0m`,
+			);
+
 			async function run(this: ESLintLitePlugin, compilation: Compilation, files: Set<string>) {
-				const start = Date.now();
 				let logSuffix;
 
 				try {
@@ -90,7 +102,7 @@ class ESLintLitePlugin {
 							const start = Date.now();
 
 							results.push(
-								await new Promise((resolve, reject) => {
+								...(await new Promise<ESLint.LintResult[]>((resolve, reject) => {
 									const code = `
 	const { ESLint } = require('eslint');
 	const { parentPort } = require('worker_threads');
@@ -106,10 +118,10 @@ class ESLintLitePlugin {
 									new Worker(code, { eval: true })
 										.on('message', r => resolve(r))
 										.on('error', ex => reject(ex));
-								}),
+								})),
 							);
 
-							logger.debug(
+							logger.log(
 								`Linting '${compilation.compiler.name}' worker(${id}) finished ${
 									files.length
 								} files in \x1b[32m${Date.now() - start}ms\x1b[0m`,
@@ -125,7 +137,7 @@ class ESLintLitePlugin {
 							);
 						}
 
-						logSuffix = ` via ${chunks?.length ?? 1} workers`;
+						logSuffix = ` ${files.size} files via ${chunks?.length ?? 1} workers`;
 						logger.log(`Linting '${compilation.compiler.name}'${logSuffix}...`);
 
 						results = [];
@@ -136,11 +148,24 @@ class ESLintLitePlugin {
 							await runWorker(0, chunks?.length ? chunks[0] : [...files], results);
 						}
 					} else {
-						logger.log(`Linting '${compilation.compiler.name}'...`);
+						logSuffix = ` ${files.size} files`;
+						logger.log(`Linting '${compilation.compiler.name}'${logSuffix}...`);
 						results = await eslint.lintFiles([...files]);
 					}
 
+					if (initialRun) {
+						resultsCache.clear();
+					} else {
+						for (const file of files) {
+							resultsCache.delete(file);
+						}
+					}
+
 					for (const result of results) {
+						resultsCache.set(result.filePath, result);
+					}
+
+					for (const result of resultsCache.values()) {
 						let file: string;
 						if (result.errorCount > 0) {
 							file ??= `./${path.relative(cwd, result.filePath).replace(/\\/gu, '/')}`;
