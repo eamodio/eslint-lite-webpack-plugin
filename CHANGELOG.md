@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.0.6] - 2023-12-01
+
 ### Changed
 
 - Changes watch output to always output all errors and warnings
@@ -33,7 +35,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.5...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.5...eamodio:v0.0.6
 [0.0.5]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.4...eamodio:v0.0.5
 [0.0.4]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.3...eamodio:v0.0.4
 [0.0.3]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.2...eamodio:v0.0.3
