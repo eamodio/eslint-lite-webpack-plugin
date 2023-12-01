@@ -47,7 +47,7 @@
 	"dependencies": {
 		"@types/eslint": "^8.44.8",
 		"@types/webpack": "^5.28.5",
-		"glob": "^10.3.10",
+		"fast-glob": "^3.3.2",
 		"minimatch": "^9.0.3"
 	},
 	"devDependencies": {
