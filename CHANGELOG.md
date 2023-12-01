@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Changed
+
+- Changes back to using the cache (when specified) for rebuilds in watch mode
+
 ## [0.0.6] - 2023-12-01
 
 ### Changed

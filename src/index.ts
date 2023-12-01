@@ -25,7 +25,7 @@ class ESLintLitePlugin {
 
 	apply(compiler: Compiler) {
 		let initialRun = true;
-		const resultsCache = new Map<string, ESLint.LintResult>();
+		let resultsCache: Map<string, ESLint.LintResult> | undefined;
 
 		compiler.hooks.make.tapPromise(ESLintLitePlugin.name, async compilation => {
 			const start = Date.now();
@@ -34,9 +34,9 @@ class ESLintLitePlugin {
 			const eslintOptions =
 				this.options.eslintOptions != null
 					? {
-							cache: initialRun ? this.options.eslintOptions.cache : false,
-							cacheLocation: initialRun ? this.options.eslintOptions.cacheLocation : undefined,
-							cacheStrategy: initialRun ? this.options.eslintOptions.cacheStrategy : undefined,
+							cache: this.options.eslintOptions.cache,
+							cacheLocation: this.options.eslintOptions.cacheLocation,
+							cacheStrategy: this.options.eslintOptions.cacheStrategy,
 							overrideConfigFile: this.options.eslintOptions.overrideConfigFile,
 					  }
 					: {};
@@ -89,12 +89,12 @@ class ESLintLitePlugin {
 			);
 
 			async function run(this: ESLintLitePlugin, compilation: Compilation, files: Set<string>) {
-				let logSuffix;
+				let logSuffix = ` ${files.size} files`;
 
 				try {
 					const cwd = compilation.compiler.context ?? process.cwd();
-
 					let results: ESLint.LintResult[];
+
 					if (this.options.worker && files.size > ESLintLitePlugin.workerFilesThreshold) {
 						const eslintOptionsJSON = JSON.stringify(eslintOptions);
 
@@ -141,7 +141,7 @@ class ESLintLitePlugin {
 							);
 						}
 
-						logSuffix = ` ${files.size} files via ${chunks?.length ?? 1} workers`;
+						logSuffix += ` via ${chunks?.length ?? 1} workers`;
 						logger.log(`Linting '${compilation.compiler.name}'${logSuffix}...`);
 
 						results = [];
@@ -149,52 +149,56 @@ class ESLintLitePlugin {
 							let id = 0;
 							await Promise.allSettled(chunks.map(c => runWorker(id++, c, results)));
 						} else {
-							await runWorker(0, chunks?.length ? chunks[0] : [...files], results);
+							await runWorker(0, chunks?.[0] ?? [...files], results);
 						}
 					} else {
-						logSuffix = ` ${files.size} files`;
 						logger.log(`Linting '${compilation.compiler.name}'${logSuffix}...`);
 						results = await eslint.lintFiles([...files]);
 					}
 
-					if (initialRun) {
-						resultsCache.clear();
-					} else {
-						for (const file of files) {
-							resultsCache.delete(file);
+					if (compiler.watchMode) {
+						resultsCache ??= new Map();
+
+						if (initialRun) {
+							resultsCache.clear();
+						} else {
+							for (const file of files) {
+								resultsCache.delete(file);
+							}
+						}
+
+						for (const result of results) {
+							resultsCache.set(result.filePath, result);
 						}
 					}
 
-					for (const result of results) {
-						resultsCache.set(result.filePath, result);
-					}
+					for (const result of resultsCache?.values() ?? results) {
+						if (result.errorCount === 0 && result.warningCount === 0) continue;
 
-					for (const result of resultsCache.values()) {
-						let file: string;
+						const file = `./${path.relative(cwd, result.filePath).replace(/\\/gu, '/')}`;
+
 						if (result.errorCount > 0) {
-							file ??= `./${path.relative(cwd, result.filePath).replace(/\\/gu, '/')}`;
 							for (const message of result.messages) {
 								if (message.severity === 2) {
-									compilation.errors.push(new ESLintIssue(file, message) as any);
+									compilation.errors.push(new ESLintIssue(file, message));
 								}
 							}
 						}
 
 						if (result.warningCount > 0) {
-							file ??= `./${path.relative(cwd, result.filePath).replace(/\\/gu, '/')}`;
 							for (const message of result.messages) {
 								if (message.severity === 1) {
-									compilation.warnings.push(new ESLintIssue(file, message) as any);
+									compilation.warnings.push(new ESLintIssue(file, message));
 								}
 							}
 						}
 					}
 				} catch (ex) {
-					logger.error(`Linting '${compilation.compiler.name}'${logSuffix ?? ''} failed: ${ex}`);
-					compilation.errors.push(new ESLintError(ex.message) as any);
+					logger.error(`Linting '${compilation.compiler.name}'${logSuffix} failed: ${ex}`);
+					compilation.errors.push(new ESLintError(ex.message));
 				} finally {
 					logger.log(
-						`Linting '${compilation.compiler.name}'${logSuffix ?? ''} finished in \x1b[32m${
+						`Linting '${compilation.compiler.name}'${logSuffix} finished in \x1b[32m${
 							Date.now() - start
 						}ms\x1b[0m`,
 					);
