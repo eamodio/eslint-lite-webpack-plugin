@@ -13,7 +13,7 @@ $ npm i eslint --save-dev
 Next, install `eslint-lite-webpack-plugin`:
 
 ```
-$ npm install eslint-lite-webpack-plugin --save-dev
+$ npm install @eamodio/eslint-lite-webpack-plugin --save-dev
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ npm install eslint-lite-webpack-plugin --save-dev
 Add the plugin to your `webpack.config.js`:
 
 ```js
-const ESLintLitePlugin = require('eslint-lite-webpack-plugin');
+const ESLintLitePlugin = require('@eamodio/eslint-lite-webpack-plugin');
 
 module.exports = {
   ...
