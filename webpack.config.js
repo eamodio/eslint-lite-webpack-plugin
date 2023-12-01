@@ -2,6 +2,7 @@
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports =
 	/**
@@ -36,11 +37,11 @@ module.exports =
 				extensions: ['.ts'],
 			},
 			optimization: {
-				minimize: mode === 'production',
+				minimize: false, //mode === 'production',
 			},
-			externals: {
-				eslint: 'commonjs eslint',
-				webpack: 'commonjs webpack',
+			externals: [nodeExternals()],
+			externalsPresets: {
+				node: true,
 			},
 			infrastructureLogging:
 				mode === 'production'

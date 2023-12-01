@@ -38,9 +38,9 @@ async function build(mode) {
 		legalComments: 'none',
 		logLevel: 'info',
 		mainFields: ['module', 'main'],
-		// metafile: true,
 		minify: mode === 'production',
 		outdir: 'dist',
+		packages: 'external',
 		platform: 'node',
 		sourcemap: mode !== 'production',
 		target: ['es2022', 'node18.15.0'],
@@ -64,8 +64,6 @@ try {
 		encoding: 'utf8',
 		shell: true,
 	});
-
-	// run tsc --emitDeclarationOnly
 } catch (ex) {
 	console.error(ex);
 	process.exit(1);
