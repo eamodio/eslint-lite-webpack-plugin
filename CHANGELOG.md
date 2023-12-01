@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.0.1] - 2023-11-30
+
 ### Added
 
 - Initial release
+
+[Unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.1...HEAD
