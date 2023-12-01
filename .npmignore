@@ -2,6 +2,7 @@
 .eslintrc.json
 .gitattributes
 .gitignore
+.npmrc
 .prettierignore
 .prettierrc
 .yarnrc
