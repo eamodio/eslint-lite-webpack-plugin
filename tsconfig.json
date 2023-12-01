@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		// "incremental": true,
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": false,
+		"outDir": "dist",
+		"rootDir": "src",
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2022",
+		// "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+		"types": ["node"],
+		"useDefineForClassFields": true,
+		"useUnknownInCatchVariables": false
+	},
+	"include": ["src/**/*"]
+}

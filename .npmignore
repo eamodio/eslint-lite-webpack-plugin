@@ -1,0 +1,13 @@
+.eslintrc.json
+.gitattributes
+.gitignore
+.prettierignore
+.prettierrc
+.yarnrc
+CHANGELOG.md
+esbuild.mjs
+tsconfig.json
+tsconfig.tsbuildinfo
+webpack.config.js
+scripts/
+src/

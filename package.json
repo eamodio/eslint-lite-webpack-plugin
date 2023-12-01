@@ -1,0 +1,69 @@
+{
+	"name": "@eamodio/eslint-lite-webpack-plugin",
+	"description": "A lightweight ESLint plugin for Webpack",
+	"version": "0.0.0",
+	"keywords": [
+		"eslint",
+		"lint",
+		"linter",
+		"plugin",
+		"webpack"
+	],
+	"engines": {
+		"node": ">= 18.15.0"
+	},
+	"license": "MIT",
+	"author": "Eric Amodio <eamodio@gmail.com>",
+	"homepage": "https://github.com/eamodio/eslint-lite-webpack-plugin",
+	"bugs": {
+		"url": "https://github.com/eamodio/eslint-lite-webpack-plugin/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eamodio/eslint-lite-webpack-plugin.git"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "webpack --mode development",
+		"bundle": "webpack --mode production",
+		"clean": "npx rimraf dist out .eslintcache* tsconfig*.tsbuildinfo",
+		"lint": "eslint \"src/**/*.ts?(x)\"",
+		"package": "yarn run bundle",
+		"prep-release": "node ./scripts/prep-release.mjs",
+		"pretty": "prettier --config .prettierrc --log-level warn --write .",
+		"pretty:check": "prettier --config .prettierrc --check .",
+		"rebuild": "yarn run reset && yarn run build",
+		"reset": "yarn run clean && yarn --frozen-lockfile",
+		"watch": "webpack --watch --mode development"
+	},
+	"peerDependencies": {
+		"eslint": "^8.0.0",
+		"webpack": "^5.0.0"
+	},
+	"dependencies": {
+		"@types/eslint": "8.44.8",
+		"@types/webpack": "5.28.5",
+		"glob": "10.3.10",
+		"minimatch": "9.0.3"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "6.13.1",
+		"@typescript-eslint/parser": "6.13.1",
+		"esbuild": "0.19.8",
+		"eslint": "8.54.0",
+		"eslint-cli": "1.1.1",
+		"eslint-config-prettier": "9.0.0",
+		"eslint-import-resolver-typescript": "3.6.1",
+		"eslint-plugin-anti-trojan-source": "1.1.1",
+		"eslint-plugin-import": "2.29.0",
+		"prettier": "3.1.0",
+		"ts-loader": "9.5.1",
+		"typescript": "5.3.2",
+		"webpack": "5.89.0",
+		"webpack-cli": "5.1.4"
+	}
+}
