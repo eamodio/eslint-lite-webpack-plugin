@@ -1,5 +1,4 @@
 .github/
-.eslintrc.json
 .gitattributes
 .gitignore
 .npmrc
@@ -8,6 +7,7 @@
 .yarnrc
 CHANGELOG.md
 esbuild.mjs
+eslint.config.mjs
 tsconfig.json
 tsconfig.tsbuildinfo
 webpack.config.js

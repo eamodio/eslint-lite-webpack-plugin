@@ -31,7 +31,7 @@
 		"build": "webpack --mode development",
 		"bundle": "webpack --mode production",
 		"clean": "npx rimraf dist out .eslintcache* tsconfig*.tsbuildinfo",
-		"lint": "eslint \"src/**/*.ts?(x)\"",
+		"lint": "eslint .",
 		"package": "yarn run bundle",
 		"prep-release": "node ./scripts/prep-release.mjs",
 		"pretty": "prettier --config .prettierrc --log-level warn --write .",
@@ -41,29 +41,29 @@
 		"watch": "webpack --watch --mode development"
 	},
 	"peerDependencies": {
-		"eslint": "^8.0.0",
-		"webpack": "^5.0.0"
+		"eslint": "^9.10.0",
+		"webpack": "^5.94.0"
 	},
 	"dependencies": {
-		"@types/eslint": "^8.44.8",
+		"@types/eslint": "^9.6.1",
 		"@types/webpack": "^5.28.5",
 		"fast-glob": "^3.3.2",
-		"minimatch": "^9.0.3"
+		"minimatch": "^10.0.1"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "6.13.1",
-		"@typescript-eslint/parser": "6.13.1",
-		"esbuild": "0.19.8",
-		"eslint": "8.54.0",
-		"eslint-cli": "1.1.1",
-		"eslint-config-prettier": "9.0.0",
-		"eslint-import-resolver-typescript": "3.6.1",
+		"@typescript-eslint/parser": "8.6.0",
+		"esbuild": "0.23.1",
+		"eslint": "9.10.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-import-resolver-typescript": "3.6.3",
 		"eslint-plugin-anti-trojan-source": "1.1.1",
-		"eslint-plugin-import": "2.29.0",
+		"eslint-plugin-import-x": "4.2.1",
+		"globals": "15.9.0",
 		"prettier": "3.1.0",
 		"ts-loader": "9.5.1",
-		"typescript": "5.3.2",
-		"webpack": "5.89.0",
+		"typescript": "5.6.2",
+		"typescript-eslint": "8.6.0",
+		"webpack": "5.94.0",
 		"webpack-cli": "5.1.4",
 		"webpack-node-externals": "3.0.0"
 	},

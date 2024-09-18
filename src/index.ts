@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as process from 'process';
 import { Worker } from 'worker_threads';
 import type { ESLint } from 'eslint';
 import { glob } from 'fast-glob';
@@ -222,9 +223,19 @@ class ESLintError extends WebpackError {
 
 class ESLintIssue extends WebpackError {
 	constructor(file: string, issue: ESLint.LintResult['messages'][0]) {
-		let fileAndLocation = `${file}:${issue.line}:${issue.column}`;
-		if (issue.endLine != null && issue.endColumn != null) {
-			fileAndLocation += `-${issue.endLine}:${issue.endColumn}`;
+		let fileAndLocation = file;
+		if (issue.line != null) {
+			fileAndLocation += `:${issue.line}`;
+			if (issue.column != null) {
+				fileAndLocation += `:${issue.column}`;
+			}
+
+			if (issue.endLine != null) {
+				fileAndLocation += `-${issue.endLine}`;
+				if (issue.endColumn != null) {
+					fileAndLocation += `:${issue.endColumn}`;
+				}
+			}
 		}
 
 		super(`\x1b[90m${issue.ruleId ?? 'Unknown'}: \x1b[0m${issue.message}`);

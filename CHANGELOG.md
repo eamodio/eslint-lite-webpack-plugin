@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: Upgrades to support eslint 9, which uses flat configuration files
+
 ## [0.0.8] - 2023-12-01
 
 ## [0.0.7] - 2023-12-01
