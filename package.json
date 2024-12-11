@@ -30,19 +30,19 @@
 	"scripts": {
 		"build": "webpack --mode development",
 		"bundle": "webpack --mode production",
-		"clean": "npx rimraf dist out .eslintcache* tsconfig*.tsbuildinfo",
+		"clean": "pnpx rimraf dist out .eslintcache* tsconfig*.tsbuildinfo",
 		"lint": "eslint .",
-		"package": "yarn run bundle",
+		"package": "pnpm run bundle",
 		"prep-release": "node ./scripts/prep-release.mjs",
-		"pretty": "prettier --config .prettierrc --log-level warn --write .",
+		"pretty": "prettier --config .prettierrc --write .",
 		"pretty:check": "prettier --config .prettierrc --check .",
-		"rebuild": "yarn run reset && yarn run build",
-		"reset": "yarn run clean && yarn --frozen-lockfile",
+		"rebuild": "pnpm run reset && pnpm run build",
+		"reset": "pnpm run clean && pnpm install --force",
 		"watch": "webpack --watch --mode development"
 	},
 	"peerDependencies": {
-		"eslint": "^9.10.0",
-		"webpack": "^5.94.0"
+		"eslint": "^9.16.0",
+		"webpack": "^5.97.1"
 	},
 	"dependencies": {
 		"@types/eslint": "^9.6.1",
@@ -51,23 +51,24 @@
 		"minimatch": "^10.0.1"
 	},
 	"devDependencies": {
-		"@typescript-eslint/parser": "8.6.0",
-		"esbuild": "0.23.1",
-		"eslint": "9.10.0",
+		"@typescript-eslint/parser": "8.18.0",
+		"esbuild": "0.24.0",
+		"eslint": "9.16.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-import-resolver-typescript": "3.6.3",
+		"eslint-import-resolver-typescript": "3.7.0",
 		"eslint-plugin-anti-trojan-source": "1.1.1",
-		"eslint-plugin-import-x": "4.2.1",
-		"globals": "15.9.0",
+		"eslint-plugin-import-x": "4.5.0",
+		"globals": "15.13.0",
 		"prettier": "3.1.0",
 		"ts-loader": "9.5.1",
-		"typescript": "5.6.2",
-		"typescript-eslint": "8.6.0",
-		"webpack": "5.94.0",
+		"typescript": "5.7.2",
+		"typescript-eslint": "8.18.0",
+		"webpack": "5.97.1",
 		"webpack-cli": "5.1.4",
 		"webpack-node-externals": "3.0.0"
 	},
 	"resolutions": {
 		"jackspeak": "2.1.1"
-	}
+	},
+	"packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }

@@ -59,7 +59,7 @@ async function build(mode) {
 
 try {
 	await build(mode);
-	spawnSync('yarn', ['tsc', '--emitDeclarationOnly'], {
+	spawnSync('pnpm', ['tsc', '--emitDeclarationOnly'], {
 		cwd: __dirname,
 		encoding: 'utf8',
 		shell: true,

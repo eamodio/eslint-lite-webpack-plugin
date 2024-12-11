@@ -5,9 +5,11 @@ import { createInterface } from 'readline';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const versionRegex = /^\d{1,4}\.\d{1,4}\.\d{1,4}$/;
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
 console.log(changelogPath);
 let data = readFileSync(changelogPath, 'utf8');
@@ -70,10 +72,10 @@ rl.question(`Enter the new version number (format x.x.x, current is ${currentVer
 			return;
 		}
 
-		// Call 'yarn version' to commit and create the tag
-		exec(`yarn version --new-version ${version}`, err => {
+		// Call 'pnpm version' to commit and create the tag
+		exec(`pnpm version ${version} -m "Bumps to v%s" -f`, err => {
 			if (err) {
-				console.error(`'yarn version' failed: ${err}`);
+				console.error(`'pnpm version' failed: ${err}`);
 				return;
 			}
 

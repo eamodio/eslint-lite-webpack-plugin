@@ -2,7 +2,6 @@
 	"compilerOptions": {
 		"declaration": true,
 		"forceConsistentCasingInFileNames": true,
-		// "incremental": true,
 		"module": "nodenext",
 		"moduleResolution": "nodenext",
 		"noFallthroughCasesInSwitch": true,
@@ -14,8 +13,6 @@
 		"sourceMap": true,
 		"strict": true,
 		"target": "es2022",
-		// "tsBuildInfoFile": "tsconfig.tsbuildinfo",
-		"types": ["node"],
 		"useDefineForClassFields": true,
 		"useUnknownInCatchVariables": false
 	},

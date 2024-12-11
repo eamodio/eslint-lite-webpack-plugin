@@ -1,10 +1,10 @@
 .github/
+.vscode/
 .gitattributes
 .gitignore
 .npmrc
 .prettierignore
 .prettierrc
-.yarnrc
 CHANGELOG.md
 esbuild.mjs
 eslint.config.mjs
