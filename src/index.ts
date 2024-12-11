@@ -11,17 +11,23 @@ interface ESLintLitePluginOptions {
 	files: string;
 	eslintOptions?: Pick<ESLint.Options, 'cache' | 'cacheLocation' | 'cacheStrategy' | 'overrideConfigFile'>;
 	worker?: boolean | { max: number; filesPerWorker?: number };
+	reportingRoot?: string;
 }
 
 class ESLintLitePlugin {
 	static readonly name = 'eslint-lite';
 	static readonly workerFilesThreshold = 10;
 
-	private readonly options: ESLintLitePluginOptions;
+	private readonly options: Omit<ESLintLitePluginOptions, 'reportingRoot'> & { reportingRoot: string };
 
 	constructor(options: ESLintLitePluginOptions) {
 		if (options?.files == null) throw new Error('No files specified');
-		this.options = { worker: true, ...options, files: options.files.replace(/\\/gu, '/') };
+		this.options = {
+			worker: true,
+			...options,
+			files: options.files.replace(/\\/gu, '/'),
+			reportingRoot: options.reportingRoot ?? process.cwd(),
+		};
 	}
 
 	apply(compiler: Compiler) {
@@ -89,11 +95,15 @@ class ESLintLitePlugin {
 				}ms\x1b[0m`,
 			);
 
-			async function run(this: ESLintLitePlugin, compilation: Compilation, files: Set<string>) {
+			async function run(
+				this: ESLintLitePlugin,
+				compilation: Compilation,
+				files: Set<string>,
+				reportingRoot: string,
+			) {
 				let logSuffix = ` ${files.size} files`;
 
 				try {
-					const cwd = compilation.compiler.context ?? process.cwd();
 					let results: ESLint.LintResult[];
 
 					if (this.options.worker && files.size > ESLintLitePlugin.workerFilesThreshold) {
@@ -176,7 +186,7 @@ class ESLintLitePlugin {
 					for (const result of resultsCache?.values() ?? results) {
 						if (result.errorCount === 0 && result.warningCount === 0) continue;
 
-						const file = `./${path.relative(cwd, result.filePath).replace(/\\/gu, '/')}`;
+						const file = `./${path.relative(reportingRoot, result.filePath).replace(/\\/gu, '/')}`;
 
 						if (result.errorCount > 0) {
 							for (const message of result.messages) {
@@ -206,7 +216,7 @@ class ESLintLitePlugin {
 				}
 			}
 
-			await run.call(this, compilation, files);
+			await run.call(this, compilation, files, this.options.reportingRoot);
 		});
 	}
 }

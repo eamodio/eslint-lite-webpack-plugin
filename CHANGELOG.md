@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Added
+
+- Adds new `reportingRoot` option to specify the root for relative paths in error reporting
+
+### Changed
+
+- Changes default root path used for relative paths in error reporting to be the cwd of the process
+
 ## [0.1.0] - 2024-09-18
 
 ### Changed
