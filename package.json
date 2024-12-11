@@ -1,7 +1,7 @@
 {
 	"name": "@eamodio/eslint-lite-webpack-plugin",
 	"description": "A lightweight ESLint plugin for Webpack",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"keywords": [
 		"eslint",
 		"lint",

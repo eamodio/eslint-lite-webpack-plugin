@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.0] - 2024-12-11
+
 ### Added
 
 - Adds new `reportingRoot` option to specify the root for relative paths in error reporting
@@ -57,7 +59,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.1.0...eamodio:v0.2.0
 [0.1.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.8...eamodio:v0.1.0
 [0.0.8]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.7...eamodio:v0.0.8
 [0.0.7]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.6...eamodio:v0.0.7
