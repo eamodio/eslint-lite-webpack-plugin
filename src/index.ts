@@ -1,8 +1,8 @@
+import { glob } from 'fs/promises';
 import * as path from 'path';
 import * as process from 'process';
 import { Worker } from 'worker_threads';
 import type { ESLint } from 'eslint';
-import { glob } from 'fast-glob';
 import { minimatch } from 'minimatch';
 import type { Compilation, Compiler } from 'webpack';
 import { WebpackError } from 'webpack';
@@ -54,17 +54,14 @@ class ESLintLitePlugin {
 
 			// If it's the initial run, lint all files.
 			if (initialRun) {
-				const paths = await glob(this.options.files, {
-					absolute: true,
+				const paths = glob(this.options.files, {
 					cwd: compiler.context,
-					followSymbolicLinks: false,
-					onlyFiles: true,
+					withFileTypes: true,
+					exclude: ({ name }) => name.includes('node_modules'),
 				});
-				for (const path of paths) {
-					if (!path.includes('node_modules')) {
-						if (!(await eslint.isPathIgnored(path))) {
-							files.add(path);
-						}
+				for await (const { name, isDirectory } of paths) {
+					if (!isDirectory() && !(await eslint.isPathIgnored(name))) {
+						files.add(name);
 					}
 				}
 

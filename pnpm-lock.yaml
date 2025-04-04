@@ -17,9 +17,6 @@ importers:
       '@types/webpack':
         specifier: ^5.28.5
         version: 5.28.5(esbuild@0.25.2)(webpack-cli@6.0.1)
-      fast-glob:
-        specifier: ^3.3.3
-        version: 3.3.3
       minimatch:
         specifier: ^10.0.1
         version: 10.0.1
