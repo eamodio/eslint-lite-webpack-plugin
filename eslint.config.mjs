@@ -3,6 +3,7 @@ import globals from 'globals';
 import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import antiTrojanSource from 'eslint-plugin-anti-trojan-source';
+import { createOxcImportResolver } from 'eslint-import-resolver-oxc';
 import importX from 'eslint-plugin-import-x';
 
 export default ts.config(
@@ -216,11 +217,7 @@ export default ts.config(
 			'import-x/parsers': {
 				'@typescript-eslint/parser': ['.ts', '.tsx'],
 			},
-			'import-x/resolver': {
-				typescript: {
-					alwaysTryTypes: true,
-				},
-			},
+			'import-x/resolver-next': [createOxcImportResolver()],
 		},
 	},
 	{
