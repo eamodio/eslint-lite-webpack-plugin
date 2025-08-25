@@ -1,7 +1,7 @@
-import { glob } from 'fs/promises';
-import * as path from 'path';
-import * as process from 'process';
-import { Worker } from 'worker_threads';
+import { glob } from 'node:fs/promises';
+import * as path from 'node:path';
+import * as process from 'node:process';
+import { Worker } from 'node:worker_threads';
 import type { ESLint } from 'eslint';
 import { minimatch } from 'minimatch';
 import type { Compilation, Compiler } from 'webpack';
@@ -9,7 +9,10 @@ import { WebpackError } from 'webpack';
 
 interface ESLintLitePluginOptions {
 	files: string;
-	eslintOptions?: Pick<ESLint.Options, 'cache' | 'cacheLocation' | 'cacheStrategy' | 'overrideConfigFile'>;
+	eslintOptions?: Pick<
+		ESLint.Options,
+		'cache' | 'cacheLocation' | 'cacheStrategy' | 'concurrency' | 'overrideConfigFile'
+	>;
 	worker?: boolean | { max: number; filesPerWorker?: number };
 	reportingRoot?: string;
 }
@@ -44,6 +47,7 @@ class ESLintLitePlugin {
 							cache: this.options.eslintOptions.cache,
 							cacheLocation: this.options.eslintOptions.cacheLocation,
 							cacheStrategy: this.options.eslintOptions.cacheStrategy,
+							concurrency: this.options.eslintOptions.concurrency,
 							overrideConfigFile: this.options.eslintOptions.overrideConfigFile,
 					  }
 					: {};
@@ -59,9 +63,9 @@ class ESLintLitePlugin {
 					withFileTypes: true,
 					exclude: ({ name }) => name.includes('node_modules'),
 				});
-				for await (const { name, isDirectory } of paths) {
-					if (!isDirectory() && !(await eslint.isPathIgnored(name))) {
-						files.add(name);
+				for await (const dir of paths) {
+					if (!dir.isDirectory() && !(await eslint.isPathIgnored(dir.name))) {
+						files.add(dir.name);
 					}
 				}
 
