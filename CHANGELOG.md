@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-08-25
+
 ## [0.2.0] - 2024-12-11
 
 ### Added
@@ -59,7 +61,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.2.0...eamodio:v0.3.0
 [0.2.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.1.0...eamodio:v0.2.0
 [0.1.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.8...eamodio:v0.1.0
 [0.0.8]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.0.7...eamodio:v0.0.8
