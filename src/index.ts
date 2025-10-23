@@ -2,7 +2,7 @@ import { glob } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as process from 'node:process';
 import { Worker } from 'node:worker_threads';
-import type { ESLint } from 'eslint';
+import { ESLint } from 'eslint';
 import { minimatch } from 'minimatch';
 import type { Compilation, Compiler } from 'webpack';
 import { WebpackError } from 'webpack';
@@ -25,6 +25,20 @@ class ESLintLitePlugin {
 
 	constructor(options: ESLintLitePluginOptions) {
 		if (options?.files == null) throw new Error('No files specified');
+
+		// Validate worker configuration
+		if (options.worker != null && typeof options.worker === 'object') {
+			if (options.worker.max != null && (options.worker.max < 1 || !Number.isInteger(options.worker.max))) {
+				throw new Error('worker.max must be a positive integer');
+			}
+			if (
+				options.worker.filesPerWorker != null &&
+				(options.worker.filesPerWorker < 1 || !Number.isInteger(options.worker.filesPerWorker))
+			) {
+				throw new Error('worker.filesPerWorker must be a positive integer');
+			}
+		}
+
 		this.options = {
 			worker: true,
 			...options,
@@ -36,6 +50,13 @@ class ESLintLitePlugin {
 	apply(compiler: Compiler) {
 		let initialRun = true;
 		let resultsCache: Map<string, ESLint.LintResult> | undefined;
+
+		// Clean up results cache for removed files to prevent memory leaks
+		compiler.hooks.invalid.tap(ESLintLitePlugin.name, (fileName, _changeTime) => {
+			if (resultsCache && fileName && compiler.removedFiles?.has(fileName)) {
+				resultsCache.delete(fileName);
+			}
+		});
 
 		compiler.hooks.make.tapPromise(ESLintLitePlugin.name, async compilation => {
 			const start = Date.now();
@@ -49,9 +70,9 @@ class ESLintLitePlugin {
 							cacheStrategy: this.options.eslintOptions.cacheStrategy,
 							concurrency: this.options.eslintOptions.concurrency,
 							overrideConfigFile: this.options.eslintOptions.overrideConfigFile,
-					  }
+						}
 					: {};
-			const eslint = new (await import('eslint')).ESLint(eslintOptions);
+			const eslint = new ESLint(eslintOptions);
 
 			const files = new Set<string>();
 			const startGlobbing = Date.now();
@@ -61,18 +82,19 @@ class ESLintLitePlugin {
 				const paths = glob(this.options.files, {
 					cwd: compiler.context,
 					withFileTypes: true,
-					exclude: ({ name }) => name.includes('node_modules'),
+					exclude: ({ name }) => name === 'node_modules',
 				});
 				for await (const dir of paths) {
-					if (!dir.isDirectory() && !(await eslint.isPathIgnored(dir.name))) {
-						files.add(dir.name);
+					if (!dir.isDirectory()) {
+						const relative = path.relative(compiler.context, path.join(dir.parentPath, dir.name));
+						if (!(await eslint.isPathIgnored(relative))) {
+							files.add(relative);
+						}
 					}
 				}
-
-				initialRun = false;
 			} else if (compilation.compiler.modifiedFiles?.size) {
 				for (const file of compilation.compiler.modifiedFiles) {
-					if (!file.includes('node_modules')) {
+					if (!/(^|[\\/])node_modules([\\/]|$)/.test(file)) {
 						const match = minimatch(file, this.options.files);
 						if (match && !(await eslint.isPathIgnored(file))) {
 							files.add(file);
@@ -101,6 +123,7 @@ class ESLintLitePlugin {
 				compilation: Compilation,
 				files: Set<string>,
 				reportingRoot: string,
+				isInitialRun: boolean,
 			) {
 				let logSuffix = ` ${files.size} files`;
 
@@ -171,7 +194,7 @@ class ESLintLitePlugin {
 					if (compiler.watchMode) {
 						resultsCache ??= new Map();
 
-						if (initialRun) {
+						if (isInitialRun) {
 							resultsCache.clear();
 						} else {
 							for (const file of files) {
@@ -184,7 +207,8 @@ class ESLintLitePlugin {
 						}
 					}
 
-					for (const result of resultsCache?.values() ?? results) {
+					const resultsToProcess = compiler.watchMode && resultsCache ? resultsCache.values() : results;
+					for (const result of resultsToProcess) {
 						if (result.errorCount === 0 && result.warningCount === 0) continue;
 
 						const file = `./${path.relative(reportingRoot, result.filePath).replace(/\\/gu, '/')}`;
@@ -207,7 +231,7 @@ class ESLintLitePlugin {
 					}
 				} catch (ex) {
 					logger.error(`Linting '${compilation.compiler.name}'${logSuffix} failed: ${ex}`);
-					compilation.errors.push(new ESLintError(ex.message));
+					compilation.errors.push(new ESLintError(ex instanceof Error ? ex.message : String(ex)));
 				} finally {
 					logger.log(
 						`Linting '${compilation.compiler.name}'${logSuffix} finished in \x1b[32m${
@@ -217,7 +241,8 @@ class ESLintLitePlugin {
 				}
 			}
 
-			await run.call(this, compilation, files, this.options.reportingRoot);
+			await run.call(this, compilation, files, this.options.reportingRoot, initialRun);
+			initialRun = false;
 		});
 	}
 }
