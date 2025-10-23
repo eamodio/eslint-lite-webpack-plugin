@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [0.3.3] - 2025-10-23
 
+- Fixes issues with relative file paths
+
 ## [0.3.2] - 2025-08-25
 
 ### Fixed
