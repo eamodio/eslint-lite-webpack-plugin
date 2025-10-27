@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes issues with relative file paths (for real this time)
+
 ## [0.3.3] - 2025-10-23
+
+### Fixed
 
 - Fixes issues with relative file paths
 

@@ -86,9 +86,9 @@ class ESLintLitePlugin {
 				});
 				for await (const dir of paths) {
 					if (!dir.isDirectory()) {
-						const relative = path.relative(compiler.context, path.join(dir.parentPath, dir.name));
-						if (!(await eslint.isPathIgnored(relative))) {
-							files.add(relative);
+						const file = path.join(dir.parentPath, dir.name);
+						if (!(await eslint.isPathIgnored(file))) {
+							files.add(file);
 						}
 					}
 				}
