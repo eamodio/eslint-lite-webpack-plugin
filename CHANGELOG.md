@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.3.4] - 2025-10-27
+
 ### Fixed
 
 - Fixes issues with relative file paths (for real this time)
@@ -81,7 +83,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.3...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.4...HEAD
+[0.3.4]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.3...eamodio:v0.3.4
 [0.3.3]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.2...eamodio:v0.3.3
 [0.3.2]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.1...eamodio:v0.3.2
 [0.3.1]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.0...eamodio:v0.3.1
