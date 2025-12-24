@@ -51,6 +51,6 @@ export default function (env, argv) {
 				? undefined
 				: {
 						level: 'log', // enables logging required for problem matchers
-				  },
+					},
 	};
 }

@@ -46,29 +46,31 @@
 		"webpack": "^5.98.0"
 	},
 	"dependencies": {
-		"minimatch": "^10.0.3"
+		"picomatch": "^4.0.3",
+		"tinyglobby": "^0.2.15"
 	},
 	"devDependencies": {
+		"@eslint/js": "9.39.2",
 		"@types/eslint": "^9.6.1",
+		"@types/picomatch": "^4.0.2",
 		"@types/webpack": "^5.28.5",
-		"@eslint/js": "9.38.0",
-		"@typescript-eslint/parser": "8.46.2",
-		"esbuild": "0.25.11",
-		"eslint": "9.38.0",
+		"@typescript-eslint/parser": "8.50.1",
+		"esbuild": "0.27.2",
+		"eslint": "9.39.2",
 		"eslint-import-resolver-oxc": "0.15.0",
-		"eslint-plugin-anti-trojan-source": "1.1.1",
+		"eslint-plugin-anti-trojan-source": "1.1.2",
 		"eslint-plugin-import-x": "4.16.1",
-		"globals": "16.4.0",
-		"prettier": "3.6.2",
+		"globals": "16.5.0",
+		"prettier": "3.7.4",
 		"ts-loader": "9.5.4",
 		"typescript": "5.9.3",
-		"typescript-eslint": "8.46.2",
-		"webpack": "5.102.1",
+		"typescript-eslint": "8.50.1",
+		"webpack": "5.104.1",
 		"webpack-cli": "6.0.1",
 		"webpack-node-externals": "3.0.0"
 	},
 	"resolutions": {
 		"jackspeak": "2.1.1"
 	},
-	"packageManager": "pnpm@10.19.0"
+	"packageManager": "pnpm@10.26.2"
 }
