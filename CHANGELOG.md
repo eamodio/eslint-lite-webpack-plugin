@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-12-24
+
 ### Added
 
 - Adds new `exclude` option to exclude files/patterns from linting (supports string or array of patterns)
@@ -99,7 +101,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.5...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.5...eamodio:v0.4.0
 [0.3.5]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.4...eamodio:v0.3.5
 [0.3.4]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.3...eamodio:v0.3.4
 [0.3.3]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.2...eamodio:v0.3.3
