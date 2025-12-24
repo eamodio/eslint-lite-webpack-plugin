@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Added
+
+- Adds trusted publishing workflow for npm
+
 ## [0.4.0] - 2025-12-24
 
 ### Added
