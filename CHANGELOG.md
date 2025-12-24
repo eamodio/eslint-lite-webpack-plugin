@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.4.2] - 2025-12-24
+
 ### Added
 
 - Adds trusted publishing workflow for npm
@@ -107,7 +109,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release
 
-[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.4.1...HEAD
+[unreleased]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.4.1...eamodio:v0.4.2
 [0.4.1]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.4.0...eamodio:v0.4.1
 [0.4.0]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.5...eamodio:v0.4.0
 [0.3.5]: https://github.com/eamodio/eslint-lite-webpack-plugin/compare/v0.3.4...eamodio:v0.3.5
